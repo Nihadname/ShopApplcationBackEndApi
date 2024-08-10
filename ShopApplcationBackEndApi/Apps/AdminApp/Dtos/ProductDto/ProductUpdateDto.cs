@@ -1,6 +1,6 @@
 ﻿namespace ShopApplcationBackEndApi.Apps.AdminApp.Dtos.ProductDto
 {
-    public class ProductCreateDTO
+    public class ProductUpdateDto
     {
         public string Name { get; set; }
         public decimal SalePrice { get; set; }

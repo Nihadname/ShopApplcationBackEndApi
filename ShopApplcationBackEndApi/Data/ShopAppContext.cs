@@ -10,6 +10,7 @@ namespace ShopApplcationBackEndApi.Data
         {
         }
         public DbSet<Product> Products { get; set; }
+        public DbSet<Category> categories { get; set; } 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

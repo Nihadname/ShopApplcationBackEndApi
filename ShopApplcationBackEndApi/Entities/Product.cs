@@ -7,6 +7,7 @@ namespace ShopApplcationBackEndApi.Entities
         public string Name { get; set; }
         public decimal SalePrice { get; set; }
         public  decimal CostPrice { get; set; }
-        public bool IsDeleted { get; set; }
+        public int? CategoryId { get; set; }
+        public Category? Category    { get; set; }
     }
 }
