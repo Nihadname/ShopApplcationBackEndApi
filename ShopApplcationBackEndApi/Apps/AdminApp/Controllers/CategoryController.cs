@@ -47,7 +47,9 @@ namespace ShopApplcationBackEndApi.Apps.AdminApp.Controllers
             await categoryCreateDto.Photo.CopyToAsync(fileStream);
             category.Name = categoryCreateDto.Name.Trim();
             category.Image = fileName;
-        
+        await shopAppContext.AddAsync(category);
+            await shopAppContext.SaveChangesAsync();
+            return StatusCode(StatusCodes.Status201Created);
         }
     }
 }
