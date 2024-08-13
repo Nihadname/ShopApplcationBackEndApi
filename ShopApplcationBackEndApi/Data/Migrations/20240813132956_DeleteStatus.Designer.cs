@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShopApplcationBackEndApi.Data;
 
@@ -11,9 +12,11 @@ using ShopApplcationBackEndApi.Data;
 namespace ShopApplcationBackEndApi.Data.Migrations
 {
     [DbContext(typeof(ShopAppContext))]
-    partial class ShopAppContextModelSnapshot : ModelSnapshot
+    [Migration("20240813132956_DeleteStatus")]
+    partial class DeleteStatus
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -105,7 +105,7 @@ namespace ShopApplcationBackEndApi.Apps.AdminApp.Controllers
             return StatusCode(StatusCodes.Status204NoContent);
         }
         [HttpPatch("{id}")]
-        public async Task<IActionResult> Patch(int? id, bool status)
+        public async Task<IActionResult> Patch(int? id,[FromQuery] bool status)
         {
             if (id == null) return BadRequest();
             var existedProduct = await _shopAppContext.Products.Where(s => !s.IsDeleted).FirstOrDefaultAsync(p => p.Id == id);

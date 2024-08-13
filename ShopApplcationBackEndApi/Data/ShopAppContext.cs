@@ -13,6 +13,11 @@ namespace ShopApplcationBackEndApi.Data
         public DbSet<Category> categories { get; set; } 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Product>()
+        .HasOne(p => p.Category)
+        .WithMany(c => c.Products)
+        .HasForeignKey(p => p.CategoryId)
+        .OnDelete(DeleteBehavior.Cascade);
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
             base.OnModelCreating(modelBuilder);
         }

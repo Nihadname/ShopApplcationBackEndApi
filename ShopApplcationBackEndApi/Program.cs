@@ -3,6 +3,7 @@ using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using ShopApplcationBackEndApi.Apps.AdminApp.Validators.ProductValidator;
 using ShopApplcationBackEndApi.Data;
+using ShopApplcationBackEndApi.Profiles;
 
 var builder = WebApplication.CreateBuilder(args);
 var config=builder.Configuration;
@@ -21,7 +22,10 @@ builder.Services.AddDbContext<ShopAppContext>(options =>
 {
     options.UseSqlServer(config.GetConnectionString("AppConnectionString"));
 });
-
+builder.Services.AddAutoMapper(opt =>
+{
+    opt.AddProfile(typeof(MapperProfile));
+});
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
