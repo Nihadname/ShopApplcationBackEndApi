@@ -51,13 +51,12 @@ namespace ShopApplcationBackEndApi.Apps.AdminApp.Controllers
         public async Task<IActionResult> Get(int? Id)
         {
             if (Id == null) return BadRequest();
-            var existedCategory=await shopAppContext.categories.Where(s=>!s.IsDeleted).FirstOrDefaultAsync(c => c.Id == Id);
+            var existedCategory=await shopAppContext.categories.Include(s=>s.Products).Where(s=>!s.IsDeleted).FirstOrDefaultAsync(c => c.Id == Id);
             if(existedCategory == null) return NotFound();
             var categoryReturnDto = mapper.Map<CategoryReturnDto>(existedCategory);
             return Ok(categoryReturnDto);
         }
         [HttpPost]
-    
         public async Task<IActionResult> Create([FromForm]CategoryCreateDto categoryCreateDto)
         {
             var Isexisted = await shopAppContext.categories.AnyAsync(s => !s.IsDeleted && s.Name.ToLower() == categoryCreateDto.Name.ToLower());
@@ -110,7 +109,6 @@ namespace ShopApplcationBackEndApi.Apps.AdminApp.Controllers
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return BadRequest();
-
             var existedCategory = await shopAppContext.categories
                 .Where(s => !s.IsDeleted)
                 .FirstOrDefaultAsync(c => c.Id == id);
@@ -124,7 +122,6 @@ namespace ShopApplcationBackEndApi.Apps.AdminApp.Controllers
 
             shopAppContext.categories.Remove(existedCategory);
             await shopAppContext.SaveChangesAsync();
-
             return Ok();
         }
 

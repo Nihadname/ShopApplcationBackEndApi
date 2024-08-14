@@ -16,6 +16,6 @@ namespace ShopApplcationBackEndApi.Apps.AdminApp.Dtos.ProductDto
     public class CategoryInProductReturnDto
     {
         public string Name { get; set; }
-        public int ProductCount { get; set; }
+        public int ProductsCount { get; set; }
     }
 }

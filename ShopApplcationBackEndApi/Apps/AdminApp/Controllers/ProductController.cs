@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ShopApplcationBackEndApi.Apps.AdminApp.Dtos.ProductDto;
 using ShopApplcationBackEndApi.Data;
@@ -12,10 +13,11 @@ namespace ShopApplcationBackEndApi.Apps.AdminApp.Controllers
     public class ProductController : ControllerBase
     {
         private readonly ShopAppContext _shopAppContext;
-
-        public ProductController(ShopAppContext shopAppContext)
+        private readonly IMapper _mapper;
+        public ProductController(ShopAppContext shopAppContext, IMapper mapper)
         {
             _shopAppContext = shopAppContext;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -48,28 +50,19 @@ namespace ShopApplcationBackEndApi.Apps.AdminApp.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> Get(int? id)
+        public async Task<ActionResult> Get(int? id)
         {
             if (id == null) return BadRequest("id can never be null");
             var product = await _shopAppContext.Products.Include(s=>s.Category).ThenInclude(s=>s.Products)
-                .Where(s => !s.IsDeleted).AsNoTracking()
+                .Where(s => !s.IsDeleted)
                 .FirstOrDefaultAsync(x => x.Id == id);
         
             if (product == null)
             {
                 return NotFound();
             }
-            ProductReturnDto returnDto = new ProductReturnDto();
-            returnDto.Name = product.Name;
-            returnDto.SalePrice = product.SalePrice;
-            returnDto.CostPrice = product.CostPrice;
-            returnDto.CreatedTime = product.CreatedTime;
-            returnDto.UpdatedTime = product.UpdatedTime;
-            returnDto.Id = product.Id;
-            returnDto.ProfitMadeFromOne = (int)(product.SalePrice - product.CostPrice);
-            returnDto.Category=new CategoryInProductReturnDto() { Name = product.Name ,
-                ProductCount=product.Category.Products.Count()};
-            return Ok(returnDto);
+           
+            return Ok(_mapper.Map<ProductReturnDto>(product));
         }
         [HttpPost]
         public async Task<IActionResult> Create(ProductCreateDTO productCreateDTO)

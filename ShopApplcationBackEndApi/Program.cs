@@ -1,5 +1,6 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using ShopApplcationBackEndApi.Apps.AdminApp.Validators.ProductValidator;
 using ShopApplcationBackEndApi.Data;
@@ -13,7 +14,7 @@ builder.Services.AddControllers();
 builder.Services.AddFluentValidationAutoValidation()
     .AddFluentValidationClientsideAdapters()
     .AddValidatorsFromAssemblyContaining<ProductCreateValidator>();
-
+builder.Services.AddFluentValidationRulesToSwagger();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -22,9 +23,10 @@ builder.Services.AddDbContext<ShopAppContext>(options =>
 {
     options.UseSqlServer(config.GetConnectionString("AppConnectionString"));
 });
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddAutoMapper(opt =>
 {
-    opt.AddProfile(typeof(MapperProfile));
+    opt.AddProfile(new MapperProfile(new HttpContextAccessor()));
 });
 var app = builder.Build();
 
