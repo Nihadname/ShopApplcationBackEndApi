@@ -64,8 +64,6 @@ namespace ShopApplcationBackEndApi.Apps.AdminApp.Controllers
             if (Isexisted) return StatusCode(StatusCodes.Status409Conflict);
             Category category =new Category();
             if(categoryCreateDto.Photo is  null) return BadRequest();
-            if (!categoryCreateDto.Photo.ContentType.Contains("image/")) return BadRequest();
-            if(categoryCreateDto.Photo.Length/ 1024 > 1500) return BadRequest();
             string fileName = Guid.NewGuid().ToString() + Path.GetExtension(categoryCreateDto.Photo.FileName);
             string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "img", fileName);
             using FileStream fileStream = new(path, FileMode.Create);
