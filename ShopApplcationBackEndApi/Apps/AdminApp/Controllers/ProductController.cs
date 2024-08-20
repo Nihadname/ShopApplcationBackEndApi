@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ShopApplcationBackEndApi.Apps.AdminApp.Dtos.ProductDto;
@@ -21,6 +22,7 @@ namespace ShopApplcationBackEndApi.Apps.AdminApp.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<Product>>> Get(string search,int page=1)
         {
             var productsAsQuery = _shopAppContext.Products.AsNoTracking().Where(s => !s.IsDeleted);

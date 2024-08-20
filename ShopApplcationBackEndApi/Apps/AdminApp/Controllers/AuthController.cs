@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using ShopApplcationBackEndApi.Apps.AdminApp.Dtos.UserDto;
 using ShopApplcationBackEndApi.Entities;
+using ShopApplcationBackEndApi.Services.Interfaces;
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
@@ -19,11 +22,15 @@ namespace ShopApplcationBackEndApi.Apps.AdminApp.Controllers
         private readonly UserManager<AppUser > _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
-        public AuthController(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)
+        private readonly IMapper _mapper;
+        private readonly ITokenService _tokenService;
+        public AuthController(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, IMapper mapper, ITokenService tokenService)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
+            _mapper = mapper;
+            _tokenService = tokenService;
         }
 
         [HttpPost("Register")]
@@ -50,32 +57,22 @@ public async Task<IActionResult> LogIn(LoginDto loginDto)
             {
                 return BadRequest();
             }
-             var handler= new JwtSecurityTokenHandler();
-            var privateKey= Encoding.UTF8.GetBytes(_configuration.GetSection("Jwt:SecretKey").Value);
-            var credentials = new SigningCredentials(
-                new SymmetricSecurityKey(privateKey), SecurityAlgorithms.HmacSha256);
-            var ci = new ClaimsIdentity();
+           
+            IList<string> roles=await _userManager.GetRolesAsync(existUser);
+            var Audience=_configuration.GetSection("Jwt:Audience").Value;
+            var SecretKey = _configuration.GetSection("Jwt:secretKey").Value;
+            var Issuer=_configuration.GetSection("Jwt:Issuer").Value;
+            return Ok(new {token= _tokenService.GetToken(SecretKey, Audience, Issuer, existUser,roles) });
 
-            ci.AddClaim(new Claim(ClaimTypes.NameIdentifier, existUser.Id));
-            ci.AddClaim(new Claim(ClaimTypes.Name, existUser.UserName));
-            ci.AddClaim(new Claim(ClaimTypes.GivenName, existUser.FullName));
-            ci.AddClaim(new Claim(ClaimTypes.Email, existUser.Email));
-            var roles=await _userManager.GetRolesAsync(existUser);
-           ci.AddClaims(roles.Select(r=> new Claim(ClaimTypes.Role, r)).ToList());     
-            //foreach (var role in roles)
-            //    ci.AddClaim(new Claim(ClaimTypes.Role, role));
+        }
+        [HttpGet]
+        [Authorize(Roles = "Member")]
+        public async  Task<IActionResult> UserProfile()
+        {
+            var existedUser= await _userManager.GetUserAsync(User);
+            if (existedUser==null) return NotFound();
 
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                SigningCredentials = credentials,
-                Expires = DateTime.UtcNow.AddHours(1),
-                Subject = ci
-            };
-            var tokenHandiling = handler.CreateToken(tokenDescriptor);
-            var Token= handler.WriteToken(tokenHandiling);
-
-            return Ok(new {token= Token });
-
+            return Ok(_mapper.Map<UserGetDto>(existedUser));
         }
     }
 }
