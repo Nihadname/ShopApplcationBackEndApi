@@ -13,6 +13,7 @@ using ShopApplcationBackEndApi.Entities;
 using ShopApplcationBackEndApi.Profiles;
 using ShopApplcationBackEndApi.Services.Implementations;
 using ShopApplcationBackEndApi.Services.Interfaces;
+using ShopApplcationBackEndApi.Settings;
 using System;
 using System.Text;
 
@@ -70,7 +71,7 @@ builder.Services.AddAuthentication(options =>
         ClockSkew = TimeSpan.Zero
     };
 });
-
+builder.Services.Configure<JwtSettings>(config.GetSection("Jwt"));
 builder.Services.AddSwaggerGen(c => {
     c.SwaggerDoc("v1", new OpenApiInfo
     {

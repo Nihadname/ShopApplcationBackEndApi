@@ -3,10 +3,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using ShopApplcationBackEndApi.Apps.AdminApp.Dtos.UserDto;
 using ShopApplcationBackEndApi.Entities;
 using ShopApplcationBackEndApi.Services.Interfaces;
+using ShopApplcationBackEndApi.Settings;
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
@@ -24,13 +26,15 @@ namespace ShopApplcationBackEndApi.Apps.AdminApp.Controllers
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
         private readonly ITokenService _tokenService;
-        public AuthController(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, IMapper mapper, ITokenService tokenService)
+        private readonly JwtSettings _jwtSettings;
+        public AuthController(IOptions<JwtSettings> jwtSettings,UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration, IMapper mapper, ITokenService tokenService)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _configuration = configuration;
             _mapper = mapper;
             _tokenService = tokenService;
+         _jwtSettings=jwtSettings.Value;
         }
 
         [HttpPost("Register")]
@@ -59,9 +63,9 @@ public async Task<IActionResult> LogIn(LoginDto loginDto)
             }
            
             IList<string> roles=await _userManager.GetRolesAsync(existUser);
-            var Audience=_configuration.GetSection("Jwt:Audience").Value;
-            var SecretKey = _configuration.GetSection("Jwt:secretKey").Value;
-            var Issuer=_configuration.GetSection("Jwt:Issuer").Value;
+            var Audience=_jwtSettings.Audience;
+            var SecretKey = _jwtSettings.secretKey;
+            var Issuer=_jwtSettings.Issuer;
             return Ok(new {token= _tokenService.GetToken(SecretKey, Audience, Issuer, existUser,roles) });
 
         }

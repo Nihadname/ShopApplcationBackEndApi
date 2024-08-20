@@ -36,6 +36,7 @@ namespace ShopApplcationBackEndApi.Services.Implementations
                 Subject = ci,
                 Audience = Audience,
                 Issuer = Issuer,
+                NotBefore = DateTime.UtcNow,
             };
             var tokenHandiling = handler.CreateToken(tokenDescriptor);
             var Token = handler.WriteToken(tokenHandiling);

@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34928.147
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopApplcationBackEndApi", "ShopApplcationBackEndApi\ShopApplcationBackEndApi.csproj", "{1DD96FDB-DB4B-4AD1-8934-FAE5E42A8F13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopApplcationBackEndApi", "ShopApplcationBackEndApi\ShopApplcationBackEndApi.csproj", "{1DD96FDB-DB4B-4AD1-8934-FAE5E42A8F13}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShopApp.Mvc", "ShopApp.Mvc\ShopApp.Mvc.csproj", "{20E8F4FA-D62F-48BE-8AD6-BAA1BF181723}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{1DD96FDB-DB4B-4AD1-8934-FAE5E42A8F13}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1DD96FDB-DB4B-4AD1-8934-FAE5E42A8F13}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1DD96FDB-DB4B-4AD1-8934-FAE5E42A8F13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20E8F4FA-D62F-48BE-8AD6-BAA1BF181723}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20E8F4FA-D62F-48BE-8AD6-BAA1BF181723}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20E8F4FA-D62F-48BE-8AD6-BAA1BF181723}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20E8F4FA-D62F-48BE-8AD6-BAA1BF181723}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
