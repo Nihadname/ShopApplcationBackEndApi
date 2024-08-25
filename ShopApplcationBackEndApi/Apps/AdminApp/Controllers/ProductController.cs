@@ -22,7 +22,6 @@ namespace ShopApplcationBackEndApi.Apps.AdminApp.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         public async Task<ActionResult<IEnumerable<Product>>> Get(string search,int page=1)
         {
             var productsAsQuery = _shopAppContext.Products.AsNoTracking().Where(s => !s.IsDeleted);

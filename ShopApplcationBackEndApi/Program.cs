@@ -100,6 +100,17 @@ builder.Services.AddSwaggerGen(c => {
     });
 });
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins", policy =>
+    {
+        policy.AllowAnyOrigin()
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -108,10 +119,16 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 app.UseStaticFiles();
 
+// Ensure CORS is used before Authorization
+app.UseCors("AllowAllOrigins"); // CORS should be before Authorization
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
 
 app.Run();
+
