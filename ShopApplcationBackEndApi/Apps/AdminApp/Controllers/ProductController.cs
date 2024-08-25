@@ -32,15 +32,16 @@ namespace ShopApplcationBackEndApi.Apps.AdminApp.Controllers
             ProductListDto productListDto = new ProductListDto();
             productListDto.Page = page;
             productListDto.TotalCount=await productsAsQuery.CountAsync();
-            productListDto.Items = await productsAsQuery.Skip((page - 1) * 2).Take(2).Select(s => new ProductListItemDto { 
+            productListDto.Items = await productsAsQuery.Skip((page - 1) * 2).Take(2).Select(s => new ProductListItemDto {
                 Name = s.Name,
                 Id = s.Id,
-                CostPrice= s.CostPrice,
-                SalePrice= s.SalePrice,
-                CreatedTime=s.CreatedTime,
-                UpdatedTime=s.UpdatedTime,
-                ProfitMadeFromOne=(int)(s.SalePrice-s.CostPrice),
-                Category=new CategoryInProductListItemDto()
+                CostPrice = s.CostPrice,
+                SalePrice = s.SalePrice,
+                CreatedTime = s.CreatedTime,
+                UpdatedTime = s.UpdatedTime,
+                ProfitMadeFromOne = (int)(s.SalePrice - s.CostPrice),
+                productImageName = "http://localhost:5104/img/" + s.productImages.FirstOrDefault(s => !s.IsDeleted && s.IsMain == true).Name,
+                Category = new CategoryInProductListItemDto()
                 {
                     Name = s.Category.Name,
                     ProductCount = s.Category.Products.Count(),

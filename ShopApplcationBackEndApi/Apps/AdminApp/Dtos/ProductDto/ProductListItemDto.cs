@@ -1,4 +1,6 @@
-﻿namespace ShopApplcationBackEndApi.Apps.AdminApp.Dtos.ProductDto
+﻿using ShopApplcationBackEndApi.Entities;
+
+namespace ShopApplcationBackEndApi.Apps.AdminApp.Dtos.ProductDto
 {
     public class ProductListItemDto
     {
@@ -9,8 +11,10 @@
         public DateTime CreatedTime { get; set; }
         public DateTime UpdatedTime { get; set; }
         public int ProfitMadeFromOne { get; set; }
+        public string productImageName { get; set; }
         public CategoryInProductListItemDto Category {  get; set; }
     }
+    
     public class CategoryInProductListItemDto
     {
         public string Name { get; set; }
