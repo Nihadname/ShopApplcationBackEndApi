@@ -47,6 +47,13 @@ namespace ShopApplcationBackEndApi.Apps.AdminApp.Controllers
             return Ok(categoryListDto);
 
         }
+        [HttpGet("getAll")]
+        public IActionResult Get()
+        {
+            return Ok(shopAppContext.categories.ToList());
+        }
+
+    
         [HttpGet("{Id}")] 
         public async Task<IActionResult> Get(int? Id)
         {

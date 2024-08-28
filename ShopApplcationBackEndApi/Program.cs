@@ -122,8 +122,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseStaticFiles();
 
-// Ensure CORS is used before Authorization
-app.UseCors("AllowAllOrigins"); // CORS should be before Authorization
+app.UseCors("AllowAllOrigins");
 
 app.UseAuthentication();
 app.UseAuthorization();

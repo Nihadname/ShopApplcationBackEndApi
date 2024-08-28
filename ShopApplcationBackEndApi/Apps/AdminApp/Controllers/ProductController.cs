@@ -22,12 +22,16 @@ namespace ShopApplcationBackEndApi.Apps.AdminApp.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Product>>> Get(string search,int page=1)
+        public async Task<ActionResult<IEnumerable<Product>>> Get(string search,int? CategoryId,int page=1)
         {
-            var productsAsQuery = _shopAppContext.Products.AsNoTracking().Where(s => !s.IsDeleted);
+            var productsAsQuery = _shopAppContext.Products.Include(s=>s.Category).AsNoTracking().Where(s => !s.IsDeleted);
             if (!string.IsNullOrEmpty(search))
             {
                 productsAsQuery = productsAsQuery.Where(s => s.Name.ToLower().Contains(search.ToLower()));
+            }
+            if (CategoryId is not null&&CategoryId!=0)
+            {
+                productsAsQuery = productsAsQuery.Where(s => s.CategoryId == CategoryId);
             }
             ProductListDto productListDto = new ProductListDto();
             productListDto.Page = page;
